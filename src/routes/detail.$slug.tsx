@@ -14,7 +14,6 @@ import {
   Link,
   notFound,
   useLoaderData,
-  useParams,
 } from "@tanstack/react-router";
 import {
   ExternalLink,
@@ -34,13 +33,16 @@ import {
 } from "@/components/ui/table";
 import { Separator } from "@/components/ui/separator";
 import { getProject } from "@/server/project";
-import { useQuery } from "@tanstack/react-query";
-import { get } from "http";
+import { setResponseStatus } from "@tanstack/react-start/server";
 
 export const Route = createFileRoute("/detail/$slug")({
   component: RouteComponent,
   loader: async ({ params }) => {
-    return getProject({ data: { slug: params.slug } } as any);
+    const result = await getProject({ data: { slug: params.slug } } as any);   
+    if (!result) {
+      throw notFound();
+    }
+    return result;
   },
   head: ({ loaderData, params }) => ({
     meta: [
@@ -49,6 +51,7 @@ export const Route = createFileRoute("/detail/$slug")({
       },
     ],
   }),
+  notFoundComponent: () => <div className="text-center w-full">- Dataz not found -</div>,
 });
 
 const IMAGE_URL = import.meta.env.VITE_IMAGE_URL;
@@ -56,10 +59,6 @@ const IMAGE_URL = import.meta.env.VITE_IMAGE_URL;
 function RouteComponent() {
   const loader = useLoaderData({ from: "/detail/$slug" });
   const project = loader?.data || [];
-  
-  if (!project[0]) {
-    return <div className="text-center py-4">- Project not found -</div>;
-  }
   let market_cap = 0;
   if (project[0]?.price && project[0]?.total_token) {
     market_cap = project[0]?.price * project[0]?.total_token;
@@ -264,7 +263,7 @@ function RouteComponent() {
             <CardContent>
               <h2>Revenue</h2>
               <div className="text-md text-gray-500 pb-4">
-                Updated {format(new Date(project[0].updatedAt), "MMMM d, yyyy")}
+                Updated {format(new Date(project[0]?.updatedAt), "MMMM d, yyyy")}
               </div>
               {project[0]?.revenue?.length > 0 ? (
                 <Table>
