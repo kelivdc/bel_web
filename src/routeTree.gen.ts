@@ -11,7 +11,6 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DetailSlugRouteImport } from './routes/detail.$slug'
-import { Route as CobaSlugRouteImport } from './routes/coba.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -23,39 +22,30 @@ const DetailSlugRoute = DetailSlugRouteImport.update({
   path: '/detail/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CobaSlugRoute = CobaSlugRouteImport.update({
-  id: '/coba/$slug',
-  path: '/coba/$slug',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/coba/$slug': typeof CobaSlugRoute
   '/detail/$slug': typeof DetailSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/coba/$slug': typeof CobaSlugRoute
   '/detail/$slug': typeof DetailSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/coba/$slug': typeof CobaSlugRoute
   '/detail/$slug': typeof DetailSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/coba/$slug' | '/detail/$slug'
+  fullPaths: '/' | '/detail/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/coba/$slug' | '/detail/$slug'
-  id: '__root__' | '/' | '/coba/$slug' | '/detail/$slug'
+  to: '/' | '/detail/$slug'
+  id: '__root__' | '/' | '/detail/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  CobaSlugRoute: typeof CobaSlugRoute
   DetailSlugRoute: typeof DetailSlugRoute
 }
 
@@ -75,19 +65,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DetailSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/coba/$slug': {
-      id: '/coba/$slug'
-      path: '/coba/$slug'
-      fullPath: '/coba/$slug'
-      preLoaderRoute: typeof CobaSlugRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  CobaSlugRoute: CobaSlugRoute,
   DetailSlugRoute: DetailSlugRoute,
 }
 export const routeTree = rootRouteImport
