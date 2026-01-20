@@ -42,20 +42,24 @@ export const Route = createFileRoute("/detail/$slug")({
   loader: async ({ params }) => {
     return getProject({ data: { slug: params.slug } } as any);
   },
-  head: ({loaderData, params}) => ({
+  head: ({ loaderData, params }) => ({
     meta: [
       {
         title: loaderData?.data?.[0]?.name,
       },
-    ],    
-  })
+    ],
+  }),
 });
 
 const IMAGE_URL = import.meta.env.VITE_IMAGE_URL;
 
 function RouteComponent() {
-  const loader = useLoaderData({ from: "/detail/$slug" }); 
+  const loader = useLoaderData({ from: "/detail/$slug" });
   const project = loader?.data || [];
+  
+  if (!project[0]) {
+    return <div className="text-center py-4">- Project not found -</div>;
+  }
   let market_cap = 0;
   if (project[0]?.price && project[0]?.total_token) {
     market_cap = project[0]?.price * project[0]?.total_token;
@@ -74,7 +78,7 @@ function RouteComponent() {
             <BreadcrumbLink>{project[0]?.name || "-"}</BreadcrumbLink>
           </BreadcrumbItem>
         </BreadcrumbList>
-      </Breadcrumb>    
+      </Breadcrumb>
       <div className="md:flex gap-8 py-4 justify-between">
         <div className="w-full md:w-[75%]">
           <div className="border rounded-sm p-6 dark:bg-neutral-800 md:flex justify-between gap-4 w-full">
