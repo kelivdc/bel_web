@@ -51,7 +51,7 @@ export const Route = createFileRoute("/detail/$slug")({
       },
     ],
   }),
-  notFoundComponent: () => <div className="text-center w-full">- Dataz not found -</div>,
+  notFoundComponent: () => <div className="text-center w-full">- Data not found -</div>,
 });
 
 const IMAGE_URL = import.meta.env.VITE_IMAGE_URL;
