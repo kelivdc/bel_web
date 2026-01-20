@@ -34,32 +34,28 @@ import {
 } from "@/components/ui/table";
 import { Separator } from "@/components/ui/separator";
 import { getProject } from "@/server/project";
-import { createServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
+import { get } from "http";
 
 export const Route = createFileRoute("/detail/$slug")({
-  component: RouteComponent,  
+  component: RouteComponent,
+  loader: async ({ params }) => {
+    return getProject({ data: { slug: params.slug } } as any);
+  },
+  head: ({loaderData, params}) => ({
+    meta: [
+      {
+        title: loaderData?.data?.[0]?.name,
+      },
+    ],    
+  })
 });
 
 const IMAGE_URL = import.meta.env.VITE_IMAGE_URL;
 
 function RouteComponent() {
-  const params = useParams({ from: "/detail/$slug" });
-  const slug = params.slug;
-  const {data, isLoading, isError} = useQuery({
-    queryKey: ["projects", slug],
-    queryFn: () => getProject({ data: { slug: slug } } as any),
-  })
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-  if (isError) {
-    return <div>Error</div>;
-  }  
-  if (!data) {
-    return <div className="text-center w-full">- Data not found -</div>;
-  }
-  const project = data?.data || [];  
+  const loader = useLoaderData({ from: "/detail/$slug" }); 
+  const project = loader?.data || [];
   let market_cap = 0;
   if (project[0]?.price && project[0]?.total_token) {
     market_cap = project[0]?.price * project[0]?.total_token;

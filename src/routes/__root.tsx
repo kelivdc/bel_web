@@ -4,12 +4,7 @@ import {
   Scripts,
   createRootRouteWithContext,
 } from "@tanstack/react-router";
-import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
-import { TanStackDevtools } from "@tanstack/react-devtools";
 
-import Header from "../components/Header";
-
-import TanStackQueryDevtools from "../integrations/tanstack-query/devtools";
 
 import appCss from "../styles.css?url";
 
@@ -21,11 +16,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Switch } from "@/components/ui/switch";
 import { useState } from "react";
-import { Toggle } from "@/components/ui/toggle";
-import { Button } from "@/components/ui/button";
-import { ArrowUpIcon } from "lucide-react";
 
 interface MyRouterContext {
   queryClient: QueryClient;
