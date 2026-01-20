@@ -9,55 +9,58 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DetailSlugRouteImport } from './routes/detail.$slug'
+import { Route as CobaSlugRouteImport } from './routes/coba.$slug'
 
-const AboutRoute = AboutRouteImport.update({
-  id: '/about',
-  path: '/about',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DetailSlugRoute = DetailSlugRouteImport.update({
+  id: '/detail/$slug',
+  path: '/detail/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CobaSlugRoute = CobaSlugRouteImport.update({
+  id: '/coba/$slug',
+  path: '/coba/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
+  '/coba/$slug': typeof CobaSlugRoute
+  '/detail/$slug': typeof DetailSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
+  '/coba/$slug': typeof CobaSlugRoute
+  '/detail/$slug': typeof DetailSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
+  '/coba/$slug': typeof CobaSlugRoute
+  '/detail/$slug': typeof DetailSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about'
+  fullPaths: '/' | '/coba/$slug' | '/detail/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about'
-  id: '__root__' | '/' | '/about'
+  to: '/' | '/coba/$slug' | '/detail/$slug'
+  id: '__root__' | '/' | '/coba/$slug' | '/detail/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AboutRoute: typeof AboutRoute
+  CobaSlugRoute: typeof CobaSlugRoute
+  DetailSlugRoute: typeof DetailSlugRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
@@ -65,12 +68,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/detail/$slug': {
+      id: '/detail/$slug'
+      path: '/detail/$slug'
+      fullPath: '/detail/$slug'
+      preLoaderRoute: typeof DetailSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/coba/$slug': {
+      id: '/coba/$slug'
+      path: '/coba/$slug'
+      fullPath: '/coba/$slug'
+      preLoaderRoute: typeof CobaSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AboutRoute: AboutRoute,
+  CobaSlugRoute: CobaSlugRoute,
+  DetailSlugRoute: DetailSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
