@@ -33,7 +33,6 @@ import {
 } from "@/components/ui/table";
 import { Separator } from "@/components/ui/separator";
 import { getProject } from "@/server/project";
-import { setResponseStatus } from "@tanstack/react-start/server";
 
 export const Route = createFileRoute("/detail/$slug")({
   component: RouteComponent,
@@ -322,12 +321,7 @@ function RouteComponent() {
                           <TableRow key={dt.id}>
                             <TableCell>{dt.item || "-"}</TableCell>
                             <TableCell>
-                              {dt.monthly
-                                ? `${new Intl.NumberFormat("en-US", {
-                                    maximumFractionDigits: 2,
-                                    minimumFractionDigits: 2,
-                                  }).format(dt.monthly)}%`
-                                : "-"}
+                              {dt.percentage || "-"}
                             </TableCell>
                           </TableRow>
                         ))
