@@ -321,7 +321,7 @@ function RouteComponent() {
                           <TableRow key={dt.id}>
                             <TableCell>{dt.item || "-"}</TableCell>
                             <TableCell>
-                              {dt.percentage || "-"}
+                              {dt.percentage || "-"}%
                             </TableCell>
                           </TableRow>
                         ))
